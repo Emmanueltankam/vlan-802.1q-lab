@@ -1,0 +1,31 @@
+! Switch "VS1" (Cisco 2960) - simule le vSwitch1 de l'ESXi
+! Câblage : Fa0/1 = SW (uplink) | Fa0/2 = VM1-2 | Fa0/3 = VM2-2 | Fa0/4 = VM3-2 g0/0 | Fa0/5 = VM3-2 g0/1 | Fa0/6 = ESXi (admin)
+enable
+configure terminal
+hostname VS1
+no ip domain-lookup
+vlan 10
+ name VLAN10
+vlan 20
+ name VLAN20
+exit
+! Uplink (équivalent de la vmnic) : VLAN 1 sans tag, 10 et 20 tagués
+interface fa0/1
+ switchport mode trunk
+ switchport trunk native vlan 1
+ switchport trunk allowed vlan 1,10,20
+! Équivalent des groupes de ports VLAN10 / VLAN20
+interface fa0/2
+ switchport mode access
+ switchport access vlan 10
+interface fa0/3
+ switchport mode access
+ switchport access vlan 20
+interface fa0/4
+ switchport mode access
+ switchport access vlan 10
+interface fa0/5
+ switchport mode access
+ switchport access vlan 20
+end
+write memory
