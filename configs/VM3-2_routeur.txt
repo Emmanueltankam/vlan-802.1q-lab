@@ -1,0 +1,13 @@
+! "VM3-2" (routeur 1941) - deux cartes, une par VLAN, sans tag
+enable
+configure terminal
+hostname VM3-2
+no ip domain-lookup
+interface g0/0
+ ip address 192.168.10.32 255.255.255.0
+ no shutdown
+interface g0/1
+ ip address 192.168.20.32 255.255.255.0
+ no shutdown
+end
+write memory
