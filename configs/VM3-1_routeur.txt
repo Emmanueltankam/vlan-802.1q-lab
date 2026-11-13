@@ -1,0 +1,16 @@
+! "VM3-1" (routeur 1941) - une seule carte, deux VLANs tagués 802.1Q
+! Équivalent Linux : eth0.10 et eth0.20
+enable
+configure terminal
+hostname VM3-1
+no ip domain-lookup
+interface g0/0
+ no shutdown
+interface g0/0.10
+ encapsulation dot1Q 10
+ ip address 192.168.10.31 255.255.255.0
+interface g0/0.20
+ encapsulation dot1Q 20
+ ip address 192.168.20.31 255.255.255.0
+end
+write memory
