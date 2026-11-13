@@ -1,0 +1,31 @@
+! Switch "SW" (Cisco 2960) - joue le rôle du switch physique du TP (3Com)
+! Câblage : Fa0/1 = VS1 (trunk) | Fa0/2 = VM1-1 | Fa0/3 = VM2-1 | Fa0/4 = VM3-1 | Fa0/5 = Poste admin
+enable
+configure terminal
+hostname SW
+no ip domain-lookup
+vlan 10
+ name VLAN10
+vlan 20
+ name VLAN20
+exit
+! Lien vers l'ESXi (VS1) : VLAN 1 sans tag (admin), VLAN 10 et 20 tagués
+interface fa0/1
+ switchport mode trunk
+ switchport trunk native vlan 1
+ switchport trunk allowed vlan 1,10,20
+! VM1-1 : port d'accès VLAN 10
+interface fa0/2
+ switchport mode access
+ switchport access vlan 10
+! VM2-1 : port d'accès VLAN 20
+interface fa0/3
+ switchport mode access
+ switchport access vlan 20
+! VM3-1 : une seule carte, VLAN 10 et 20 tagués
+interface fa0/4
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20
+! Fa0/5 (poste admin) : VLAN 1 par défaut, rien à configurer
+end
+write memory
